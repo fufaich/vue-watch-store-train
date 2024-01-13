@@ -1,7 +1,7 @@
 <script setup>
 import { inject } from 'vue'
 
-const cartActions = inject('cartActions')
+const cartActions = inject('cart')
 </script>
 
 <template>

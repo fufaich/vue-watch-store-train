@@ -6,13 +6,11 @@
     title: String,
     price: Number,
     isFavorite: Boolean,
-    isAdded: {
-      type: Boolean,
-      default: false,
-    },
-
+    isAdded: Boolean,
+    onClickAdd: Function,
     onClickFavorite: Function,
   })
+
 
 
 
@@ -31,7 +29,7 @@
         <b>{{ props.price }} руб.</b>
 
       </div>
-      <img :src="!isAdded? '/plus.svg' : '/checked.svg'" alt="Plus" @click="onClickAdd"/>
+      <img :src="!props.isAdded? '/plus.svg' : '/checked.svg'" alt="Plus" @click="onClickAdd"/>
 
     </div>
   </div>

@@ -1,5 +1,5 @@
 <script setup>
-  defineProps({
+  const props = defineProps({
     imageUrl: String,
     title: String,
     price: Number,
@@ -8,12 +8,12 @@
 
 <template>
   <div class="border border-slate-200 p-4 w-full rounded-xl flex gap-4 items-center">
-    <img :src="imageUrl" alt="Sneaker" class="w-16 h-16">
+    <img :src="props.imageUrl" alt="Sneaker" class="w-16 h-16">
     <div class="flex  flex-col">
-      <p>Кроссовки Nike air max 123</p>
+      <p>{{props.title}}</p>
       <div class="flex justify-between mt-2">
-        <b>12 999р.</b>
-        <img class= "opacity-40 hover:opacity-100 cursor-pointer transition"  src="/close.svg" />
+        <b>{{props.price}} руб.</b>
+        <img class= "opacity-40 hover:opacity-100 cursor-pointer transition"  src="/close.svg"  alt="Закрыть"/>
       </div>
     </div>
   </div>

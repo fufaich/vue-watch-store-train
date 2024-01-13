@@ -6,18 +6,30 @@ import DrawerComponent from '@/components/DrawerComponent.vue'
 import axios from 'axios'
 
 const items = ref([]);
-
+const cart = ref([]);
 const drawerOpen = ref(false); // DrawerOpen
-const changeDrawer = () =>{
-  drawerOpen.value = !drawerOpen.value;
-}
-
-
 const filters = ref({
   sortBy: 'title',
   searchQuery: '',
 });
 
+const addToCart = (item) =>{
+  if(!item.isAdded){
+    cart.value.push(item);
+    item.isAdded = true;
+  }else{
+    cart.value.splice(cart.value.indexOf(item),1);
+    item.isAdded = false;
+  }
+}
+
+
+
+
+
+const changeDrawer = () =>{
+  drawerOpen.value = !drawerOpen.value;
+}
 const onChangeSelect = (event) => {
   filters.value.sortBy = event.target.value;
 };
@@ -45,7 +57,6 @@ const fetchItems = async () =>{
       console.log(e)
     }
 }
-
 const fetchFavorites = async () =>
 {
   try {
@@ -64,6 +75,24 @@ const fetchFavorites = async () =>
     console.log(e);
   }
 };
+const addToFavorite = async (item) =>{
+    try{
+      if (!item.isFavorite) {
+        item.isFavorite = true;
+        const obj = {
+          itemId: item.id,
+        }
+        const {data} = await axios.post(`https://78f600b7e2539b8d.mokky.dev/favorites`, obj);
+        item.favoriteId = data.id
+      }else {
+        item.isFavorite = false;
+        await axios.delete(`https://78f600b7e2539b8d.mokky.dev/favorites/${item.favoriteId}`);
+        item.favoriteId = null;
+      }
+    }catch (e) {
+      console.log(e);
+    }
+}
 
 onMounted(async () =>{
   await fetchItems();
@@ -74,32 +103,9 @@ watch(filters, ()=>{
   fetchFavorites();
 },  {deep: true});
 
-const addToFavorite = async (item) =>{
-    try{
-      if (!item.isFavorite) {
-        item.isFavorite = true;
-        const obj = {
-          itemId: item.id,
-        }
-        const {data} = await axios.post(`https://78f600b7e2539b8d.mokky.dev/favorites`, obj);
-
-
-        item.favoriteId = data.id
-      }else {
-        item.isFavorite = false;
-        await axios.delete(`https://78f600b7e2539b8d.mokky.dev/favorites/${item.favoriteId}`);
-
-        item.favoriteId = null;
-      }
-
-    }catch (e) {
-      console.log(e);
-    }
-
-}
-
-provide('cartActions', {
-  changeDrawer
+provide('cart', {
+  changeDrawer,
+  cartList: cart,
 });
 </script>
 
@@ -126,7 +132,7 @@ provide('cartActions', {
         </div>
       </div>
     </div>
-    <CardListComponent :items="items" @addToFavorite="addToFavorite"/>
+    <CardListComponent :items="items" @addToFavorite="addToFavorite" @addToCart="addToCart"/>
     <DrawerComponent v-if="drawerOpen" />
 
 

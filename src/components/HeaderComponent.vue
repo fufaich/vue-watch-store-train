@@ -1,6 +1,19 @@
 <script setup>
-const emit = defineEmits(["showDrawer"]);
+import { inject, onMounted, ref, watch } from 'vue'
 
+const emit = defineEmits(["showDrawer"]);
+const cart = inject('cart');
+const sumCart = ref(0);
+
+
+const updateSummCart = (list) => {
+  sumCart.value = list.reduce((acc, item) => acc + item.price, 0);
+};
+
+onMounted(
+  () => updateSummCart(cart.cartList.value)
+);
+watch(cart.cartList, () => updateSummCart(cart.cartList.value), {deep: true});
 </script>
 
 <template>
@@ -17,7 +30,7 @@ const emit = defineEmits(["showDrawer"]);
     <ul class="flex items-center gap-5">
       <li class="flex items-center gap-3 text-gray-500 cursor-pointer hover:text-black" @click="emit('showDrawer')">
         <img src="/cart.svg" alt="Cart"/>
-        <b>0 руб.</b>
+        <b>{{ sumCart }} руб.</b>
       </li>
       <li class="flex items-center gap-3 text-gray-500 cursor-pointer hover:text-black">
         <img src="/heart.svg" alt="Favorite"/>
