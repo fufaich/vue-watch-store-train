@@ -6,24 +6,45 @@ import DrawerComponent from '@/components/DrawerComponent.vue'
 import axios from 'axios'
 
 const items = ref([]);
-const cart = ref([]);
+const cart = ref({
+  cartList: [],
+  sumCart: 0,
+});
 const drawerOpen = ref(false); // DrawerOpen
 const filters = ref({
   sortBy: 'title',
   searchQuery: '',
 });
-
+const isCreatingOrder = ref(false);
 const addToCart = (item) =>{
+  console.log(item);
   if(!item.isAdded){
-    cart.value.push(item);
+    cart.value.cartList.push(item);
     item.isAdded = true;
   }else{
-    cart.value.splice(cart.value.indexOf(item),1);
+    cart.value.cartList.splice(cart.value.cartList.indexOf(item),1);
     item.isAdded = false;
   }
 }
 
-
+const createOrder = async () => {
+  try {
+    isCreatingOrder.value = true;
+    const obj = {
+      items: cart.value.cartList,
+      total: cart.value.sumCart
+    }
+    await axios.post('https://78f600b7e2539b8d.mokky.dev/orders', obj);
+    cart.value.cartList = [];
+    cart.value.sumCart = 0;
+    items.value = items.value.map(obj => ({...obj,  isAdded: false}));
+    // changeDrawer();
+  }catch (e){
+    console.log(e);
+  }finally {
+    isCreatingOrder.value = false;
+  }
+}
 
 
 
@@ -95,17 +116,24 @@ const addToFavorite = async (item) =>{
 }
 
 onMounted(async () =>{
+
   await fetchItems();
-  await fetchFavorites()
+  await fetchFavorites();
+
 });
 watch(filters, ()=>{
   fetchItems();
   fetchFavorites();
 },  {deep: true});
-
+watch(cart.value.cartList, async ()=>{
+  cart.value.sumCart = cart.value.cartList.reduce((acc, item) => acc + item.price, 0);
+  localStorage.setItem('cart', JSON.stringify(cart.value));
+})
 provide('cart', {
   changeDrawer,
-  cartList: cart,
+  createOrder,
+  addToCart,
+  cart: cart,
 });
 </script>
 
@@ -133,7 +161,7 @@ provide('cart', {
       </div>
     </div>
     <CardListComponent :items="items" @addToFavorite="addToFavorite" @addToCart="addToCart"/>
-    <DrawerComponent v-if="drawerOpen" />
+    <DrawerComponent v-if="drawerOpen" :isCreatingOrder="isCreatingOrder"/>
 
 
 

@@ -8,10 +8,14 @@ const cart = inject("cart");
 
 <template>
     <div class="flex-col flex gap-4 flex-1" >
-      <CartItem v-for="item in cart.cartList.value" :key="item.id"
+      <CartItem v-for="item in cart.cart.value.cartList" :key="item.id"
         :image-url="item.imageUrl"
         :title="item.title"
         :price="item.price"
+                @clickDelete="() =>{
+                  cart.addToCart(item);
+                  console.log(item);
+                }"
       />
 
     </div>
