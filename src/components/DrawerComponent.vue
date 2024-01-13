@@ -2,6 +2,8 @@
 
 import DrawerHeadComponent from '@/components/DrawerHeadComponent.vue'
 import CartListItem from '@/components/CartListItem.vue'
+
+
 </script>
 
 <template>

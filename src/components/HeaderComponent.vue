@@ -1,4 +1,5 @@
 <script setup>
+const emit = defineEmits(["showDrawer"]);
 
 </script>
 
@@ -8,13 +9,13 @@
     <div class="flex items-center gap-4">
       <img src="/logo.png" alt="Logo" class="w-10"/>
       <div>
-        <h2 class="font-bold text-xl uppercase">Vue Sneakers</h2>
-        <p class="text-slate-400">Магазин лучших кроссовок</p>
+        <h2 class="font-bold text-xl uppercase">Vue Watch</h2>
+        <p class="text-slate-400">Магазин лучших часов</p>
       </div>
     </div>
 
     <ul class="flex items-center gap-5">
-      <li class="flex items-center gap-3 text-gray-500 cursor-pointer hover:text-black">
+      <li class="flex items-center gap-3 text-gray-500 cursor-pointer hover:text-black" @click="emit('showDrawer')">
         <img src="/cart.svg" alt="Cart"/>
         <b>0 руб.</b>
       </li>
