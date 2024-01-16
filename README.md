@@ -4,6 +4,8 @@
 
 ## Тут я начинаю изучать VUE.
 ## #Пример проекта
+https://github.com/fufaich/vue-watch-store-train/assets/47496262/2c03320d-ba57-45b6-9450-1f621a309cea
+
 
 ## Как установить и запустить
 
