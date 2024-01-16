@@ -4,7 +4,6 @@ import CardComponents from '@/components/CardComponents.vue'
 defineProps({
   items: Array,
 })
-const onClickAdd = () => { alert('Добавить') };
 
 const emit = defineEmits(['addToFavorite','addToCart']);
 
@@ -12,7 +11,7 @@ const emit = defineEmits(['addToFavorite','addToCart']);
 
 <template>
   <div class="p-10">
-    <div class="grid grid-cols-4 gap-5" >
+    <div class="grid grid-cols-4 gap-5" v-auto-animate >
       <CardComponents
         v-for="item in items"
         :key="item.id"

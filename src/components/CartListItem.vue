@@ -7,7 +7,7 @@ const cart = inject("cart");
 </script>
 
 <template>
-    <div class="flex-col flex gap-4 flex-1" >
+    <div class="flex-col flex gap-4 flex-1" v-auto-animate >
       <CartItem v-for="item in cart.cart.value.cartList" :key="item.id"
         :image-url="item.imageUrl"
         :title="item.title"
