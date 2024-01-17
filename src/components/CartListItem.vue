@@ -14,7 +14,6 @@ const cart = inject("cart");
         :price="item.price"
                 @clickDelete="() =>{
                   cart.addToCart(item);
-                  console.log(item);
                 }"
       />
 
